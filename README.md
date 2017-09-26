@@ -471,14 +471,15 @@ needs to be configured.
 
 prefix: `consul-alerts/config/notifiers/hipchat/`
 
-| key          | description                                               |
-|--------------|-----------------------------------------------------------|
-| enabled      | Enable the HipChat notifier. [Default: false]             |
-| from         | The name to send notifications as  (optional)             |
-| cluster-name | The name of the cluster. [Default: "Consul Alerts"]       |
-| base-url     | HipChat base url [Default: `https://api.hipchat.com/v2/`] |
-| room-id      | The room to post to                  (mandatory)          |
-| auth-token   | Authentication token                 (mandatory)          |
+| key            | description                                               |
+|----------------|-----------------------------------------------------------|
+| enabled        | Enable the HipChat notifier. [Default: false]             |
+| from           | The name to send notifications as  (optional)             |
+| cluster-name   | The name of the cluster. [Default: "Consul Alerts"]       |
+| base-url       | HipChat base url [Default: `https://api.hipchat.com/v2/`] |
+| room-id        | The room to post to                  (mandatory)          |
+| auth-token     | Authentication token                 (mandatory)          |
+| include-output | Include the output of the service check. [Default: false]  |
 
 The `auth-token` needs to be a room notification token for the `room-id`
 being posted to.

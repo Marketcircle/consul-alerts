@@ -144,8 +144,9 @@ func DefaultAlertConfig() *ConsulAlertConfig {
 	}
 
 	hipchat := &notifier.HipChatNotifier{
-		Enabled:     false,
-		ClusterName: "Consul-Alerts",
+		Enabled:       false,
+		ClusterName:   "Consul-Alerts",
+		IncludeOutput: false,
 	}
 
 	opsgenie := &notifier.OpsGenieNotifier{
@@ -174,7 +175,6 @@ func DefaultAlertConfig() *ConsulAlertConfig {
 		AwsSns:     awsSns,
 		VictorOps:  victorOps,
 		Custom:     []string{},
-
 	}
 
 	return &ConsulAlertConfig{

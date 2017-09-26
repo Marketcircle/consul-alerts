@@ -193,6 +193,8 @@ func (c *ConsulAlertClient) LoadConfig() {
 				valErr = loadCustomValue(&config.Notifiers.HipChat.BaseURL, val, ConfigTypeString)
 			case "consul-alerts/config/notifiers/hipchat/from":
 				valErr = loadCustomValue(&config.Notifiers.HipChat.From, val, ConfigTypeString)
+			case "consul-alerts/config/notifiers/hipchat/include-output":
+				valErr = loadCustomValue(&config.Notifiers.HipChat.IncludeOutput, val, ConfigTypeBool)
 
 			// OpsGenie notifier config
 			case "consul-alerts/config/notifiers/opsgenie/enabled":
@@ -748,7 +750,9 @@ func (c *ConsulAlertClient) IsBlacklisted(check *Check) bool {
 
 	node := check.Node
 	nodeCheckKey := fmt.Sprintf("consul-alerts/config/checks/blacklist/nodes/%s", node)
-	nodeBlacklisted := func() bool { return c.CheckKeyExists(nodeCheckKey) || c.CheckKeyMatchesRegexp("consul-alerts/config/checks/blacklist/nodes", node) }
+	nodeBlacklisted := func() bool {
+		return c.CheckKeyExists(nodeCheckKey) || c.CheckKeyMatchesRegexp("consul-alerts/config/checks/blacklist/nodes", node)
+	}
 
 	service := "_"
 	serviceBlacklisted := func() bool { return false }
@@ -756,13 +760,17 @@ func (c *ConsulAlertClient) IsBlacklisted(check *Check) bool {
 		service = check.ServiceID
 		serviceCheckKey := fmt.Sprintf("consul-alerts/config/checks/blacklist/services/%s", service)
 
-		serviceBlacklisted = func() bool { return c.CheckKeyExists(serviceCheckKey) || c.CheckKeyMatchesRegexp("consul-alerts/config/checks/blacklist/services", service) }
+		serviceBlacklisted = func() bool {
+			return c.CheckKeyExists(serviceCheckKey) || c.CheckKeyMatchesRegexp("consul-alerts/config/checks/blacklist/services", service)
+		}
 	}
 
 	checkID := check.CheckID
 	checkCheckKey := fmt.Sprintf("consul-alerts/config/checks/blacklist/checks/%s", checkID)
 
-	checkBlacklisted := func() bool { return c.CheckKeyExists(checkCheckKey) || c.CheckKeyMatchesRegexp("consul-alerts/config/checks/blacklist/checks", checkID) }
+	checkBlacklisted := func() bool {
+		return c.CheckKeyExists(checkCheckKey) || c.CheckKeyMatchesRegexp("consul-alerts/config/checks/blacklist/checks", checkID)
+	}
 
 	singleKey := fmt.Sprintf("consul-alerts/config/checks/blacklist/single/%s/%s/%s", node, service, checkID)
 	singleBlacklisted := func() bool { return c.CheckKeyExists(singleKey) }

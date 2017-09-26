@@ -13,12 +13,13 @@ import (
 )
 
 type HipChatNotifier struct {
-	Enabled     bool
-	ClusterName string `json:"cluster-name"`
-	RoomId      string `json:"room-id"`
-	AuthToken   string `json:"auth-token"`
-	BaseURL     string `json:"base-url"`
-	From        string `json:"from"`
+	Enabled       bool
+	ClusterName   string `json:"cluster-name"`
+	RoomId        string `json:"room-id"`
+	AuthToken     string `json:"auth-token"`
+	BaseURL       string `json:"base-url"`
+	From          string `json:"from"`
+	IncludeOutput bool   `json:"include-output"`
 }
 
 // NotifierName provides name for notifier selection
@@ -41,8 +42,10 @@ func (notifier *HipChatNotifier) Notify(messages Messages) bool {
 	for _, message := range messages {
 		text += fmt.Sprintf("<BR><STRONG><CODE>%s</CODE></STRONG>:%s:%s is <STRONG>%s</STRONG>.",
 			message.Node, html.EscapeString(message.Service), html.EscapeString(message.Check), message.Status)
-		if utf8.RuneCountInString(message.Output) > 0 {
-			text += fmt.Sprintf("<BR>%s", strings.Replace(html.EscapeString(strings.TrimSpace(message.Output)), "\n", "<BR>", -1))
+		if notifier.IncludeOutput {
+			if utf8.RuneCountInString(message.Output) > 0 {
+				text += fmt.Sprintf("<BR>%s", strings.Replace(html.EscapeString(strings.TrimSpace(message.Output)), "\n", "<BR>", -1))
+			}
 		}
 	}
 
